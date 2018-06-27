@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/sergeysergeevru/pygmaeus.svg?branch=master)](https://travis-ci.org/sergeysergeevru/pygmaeus)
+
 Simple configuration library for binding configuration to structure from config.yml (had to be at working directory), environment variables and cli arguments.
 A priority of value for structure is next: config.yml (the lowest priority), env vars, cli args (the major priority).
 
