@@ -12,5 +12,21 @@ var Config struct{
 
 pygmaeus.Bind(&config)
 ~~~
+Configuration via YML file 'config.yml'
+~~~
+server:
+    host: localhost
+    port: 80
+~~~
+Configuration via Env
+~~~
+$ export Server.Host=localhost
+$ export Server.Port=80
+~~~
+Configuration via Args
+~~~
+./app -Server.Host=localhost -Server.Port=80
+~~~
 
-Main aim of this library take experience with reflect Go library. Also I express my point of view of configuration library.
+
+The aim of this library take experience with reflect Go library. Also I express my point of view of configuration library.
