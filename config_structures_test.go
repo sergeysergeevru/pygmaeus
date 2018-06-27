@@ -33,10 +33,9 @@ type configTypes struct {
 	String  string
 }
 
-
 type subLevelConfig struct {
 	SubRootOne sub2LevelConfig `yaml:"level_2_1"`
-	SubRootTwo configTypes `yaml:"level_2_2"`
+	SubRootTwo configTypes     `yaml:"level_2_2"`
 }
 
 type sub2LevelConfig struct {

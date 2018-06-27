@@ -39,6 +39,7 @@ func printIfDebug(format string, args ...interface{}) {
 		}
 	}
 }
+
 /*
 	Prefix for environment variable taken by os.GetEnv;
 	Set up by package function SetEnvPrefix
