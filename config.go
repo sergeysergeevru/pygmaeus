@@ -139,7 +139,14 @@ func Bind(v interface{}) {
 }
 
 func ReadFromFile(v interface{}) {
-	name := fmt.Sprintf("%s.%s", fileName, fileType)
+	var name string
+	localConfig := fmt.Sprintf("%s_local.%s", fileName, fileType)
+	if _, err := os.Stat(localConfig); os.IsNotExist(err){
+		name = fmt.Sprintf("%s.%s", fileName, fileType)
+	} else {
+		name = localConfig
+	}
+
 	switch fileType {
 	case YmlExtension:
 		ReadFromYml(v,name)
