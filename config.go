@@ -5,24 +5,35 @@ import (
 	"strconv"
 	"errors"
 	"fmt"
-	"io/ioutil"
-	"gopkg.in/yaml.v2"
 	"flag"
 	"os"
 	"runtime"
+	"io/ioutil"
+	"gopkg.in/yaml.v2"
 )
 
-var defaultFile string
-var defaultType FileType
+var fileName string
+var fileType FileType
 var argOffset = 1
 
 type FileType string
+
+const (
+	YmlExtension FileType = "yml"
+	JsonExtension FileType = "json"
+)
+
+func SetFileType(t FileType)  {
+	fileType = t
+}
 
 var isDebugMode bool
 
 var configFlagSet = flag.NewFlagSet(FlagSetName, flag.ContinueOnError)
 
 const FlagSetName = "pygmaeus-config"
+
+
 
 func EnableDebug(enable bool) {
 	isDebugMode = enable
@@ -111,7 +122,8 @@ func (fl argFlag) String() string {
 }
 
 func init() {
-	defaultFile = "config.yml"
+	fileName = "config"
+	fileType = YmlExtension
 }
 
 /*
@@ -127,15 +139,37 @@ func Bind(v interface{}) {
 }
 
 func ReadFromFile(v interface{}) {
-	printIfDebug("ReadFromFile: start reading")
-	defer printIfDebug("ReadFromFile: exit from function")
-	dataByte, err := ioutil.ReadFile(defaultFile)
-	if err != nil {
-		panic("can't read config")
+	name := fmt.Sprintf("%s.%s", fileName, fileType)
+	switch fileType {
+	case YmlExtension:
+		ReadFromYml(v,name)
+	case JsonExtension:
+		ReadFromJson(v,name)
 	}
+}
+
+func ReadFromYml(v interface{}, filename string){
+	printIfDebug("ReadFromYml: start  reading")
+	defer printIfDebug("ReadFromYml: exit from function")
+	dataByte, err := ioutil.ReadFile(filename)
+	panicOnErr(err, "can't read config")
 	err = yaml.Unmarshal(dataByte, v)
+	panicOnErr(err,"can't unmarshal")
+}
+
+func ReadFromJson(v interface{},filename string)  {
+	printIfDebug("ReadFromYml: start json reading")
+	defer printIfDebug("ReadFromYml: exit from function")
+	dataByte, err := ioutil.ReadFile(filename)
+	panicOnErr(err,"can't read config")
+	err = yaml.Unmarshal(dataByte, v)
+	panicOnErr(err,"can't unmarshal")
+}
+
+func panicOnErr(err error, message string) {
 	if err != nil {
-		panic("can't unmarshal")
+		printIfDebug(message)
+		panic(message)
 	}
 }
 

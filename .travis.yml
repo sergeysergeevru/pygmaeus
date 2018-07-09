@@ -2,6 +2,6 @@ language: go
 go:
   - master
 script:
-  - go test -run Yml && go test -run Args && go test -run Env
+  - go test -run Yml && go test -run Json && go test -run Args && go test -run Env
 notifications:
   email: true

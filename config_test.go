@@ -31,12 +31,24 @@ var realLevelConfig = levelConfig{
 }
 
 func TestYml(t *testing.T) {
+	EnableDebug(true)
 	var debug levelConfig
 	ReadFromFile(&debug)
 	if !reflect.DeepEqual(debug, realLevelConfig) {
 		t.FailNow()
 	}
 }
+
+func TestJson(t *testing.T) {
+	EnableDebug(true)
+	SetFileType(JsonExtension)
+	var debug levelConfig
+	ReadFromFile(&debug)
+	if !reflect.DeepEqual(debug, realLevelConfig) {
+		t.FailNow()
+	}
+}
+
 
 func TestArgs(t *testing.T) {
 	var debug levelConfig
