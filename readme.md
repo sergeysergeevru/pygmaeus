@@ -32,3 +32,5 @@ Configuration via Args
 
 
 The aim of this library take experience with reflect Go library. Also I express my point of view of configuration library.
+
+TODO: add config_local support
