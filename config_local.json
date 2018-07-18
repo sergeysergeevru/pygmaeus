@@ -1,0 +1,22 @@
+{
+  "level_1_1": {
+    "level_2_1": {
+      "level_3_1": {
+        "int64": 986655,
+        "int32": 2147,
+        "float32": 657.03,
+        "float64": 5434.55,
+        "bool": false,
+        "string": "local config"
+      }
+    },
+    "level_2_2": {
+      "int64": -922337203,
+      "int32": -214,
+      "float32": -65777.03,
+      "float64": -5324.15,
+      "bool": true,
+      "string": null
+    }
+  }
+}

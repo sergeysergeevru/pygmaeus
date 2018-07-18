@@ -7,34 +7,23 @@ import (
 	"fmt"
 )
 
-var realLevelConfig = levelConfig{
-	Root: subLevelConfig{
-		SubRootOne: sub2LevelConfig{
-			SubSubRoot: configTypes{
-				Int64:   9223372036854775807,
-				Int32:   2147483647,
-				Float64: 65777.03,
-				Float32: 54.05,
-				String:  "lol",
-				Bool:    true,
-			},
-		},
-		SubRootTwo: configTypes{
-			Int64:   -9223372036854775808,
-			Int32:   -2147483648,
-			Float64: -65777.03,
-			Float32: -54.05,
-			String:  "",
-			Bool:    false,
-		},
-	},
-}
-
 func TestYml(t *testing.T) {
 	EnableDebug(true)
+	EnableLocalSupport(false)
 	var debug levelConfig
 	ReadFromFile(&debug)
 	if !reflect.DeepEqual(debug, realLevelConfig) {
+		t.FailNow()
+	}
+}
+
+func TestYmlLocal(t *testing.T) {
+	EnableDebug(true)
+	EnableLocalSupport(true)
+	var debug levelConfig
+	ReadFromFile(&debug)
+	if !reflect.DeepEqual(debug, realConfigLocal) {
+		t.Log(realConfigLocal, debug)
 		t.FailNow()
 	}
 }
@@ -42,6 +31,7 @@ func TestYml(t *testing.T) {
 func TestJson(t *testing.T) {
 	EnableDebug(true)
 	SetFileType(JsonExtension)
+	EnableLocalSupport(false)
 	var debug levelConfig
 	ReadFromFile(&debug)
 	if !reflect.DeepEqual(debug, realLevelConfig) {
@@ -49,6 +39,17 @@ func TestJson(t *testing.T) {
 	}
 }
 
+
+func TestJsonLocal(t *testing.T) {
+	EnableDebug(true)
+	SetFileType(JsonExtension)
+	EnableLocalSupport(true)
+	var debug levelConfig
+	ReadFromFile(&debug)
+	if !reflect.DeepEqual(debug, realConfigLocal) {
+		t.FailNow()
+	}
+}
 
 func TestArgs(t *testing.T) {
 	var debug levelConfig

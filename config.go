@@ -29,6 +29,8 @@ func SetFileType(t FileType)  {
 
 var isDebugMode bool
 
+var isLocalSupport = true
+
 var configFlagSet = flag.NewFlagSet(FlagSetName, flag.ContinueOnError)
 
 const FlagSetName = "pygmaeus-config"
@@ -39,15 +41,20 @@ func EnableDebug(enable bool) {
 	isDebugMode = enable
 }
 
+func EnableLocalSupport(status bool){
+	isLocalSupport = status
+}
+
 func printIfDebug(format string, args ...interface{}) {
 	if isDebugMode {
 		_, fn, line, _ := runtime.Caller(1)
-		fmt.Printf("\n [%s:%d] ", fn, line)
+		fmt.Printf(" [%s:%d] ", fn, line)
 		if len(args) > 0 {
 			fmt.Printf(format, args...)
 		} else {
 			fmt.Print(format)
 		}
+		fmt.Println()
 	}
 }
 
@@ -139,7 +146,16 @@ func Bind(v interface{}) {
 }
 
 func ReadFromFile(v interface{}) {
-	name := fmt.Sprintf("%s.%s", fileName, fileType)
+	var name string
+	localConfig := fmt.Sprintf("%s_local.%s", fileName, fileType)
+	printIfDebug("ReadFromFile: local is %t; config file is %s", isLocalSupport, localConfig)
+	if _, err := os.Stat(localConfig); os.IsNotExist(err) || !isLocalSupport {
+		name = fmt.Sprintf("%s.%s", fileName, fileType)
+	} else {
+		printIfDebug("ReadFromFile: it's reading local config")
+		name = localConfig
+	}
+
 	switch fileType {
 	case YmlExtension:
 		ReadFromYml(v,name)
@@ -149,7 +165,7 @@ func ReadFromFile(v interface{}) {
 }
 
 func ReadFromYml(v interface{}, filename string){
-	printIfDebug("ReadFromYml: start  reading")
+	printIfDebug("ReadFromYml: start  reading %s", filename)
 	defer printIfDebug("ReadFromYml: exit from function")
 	dataByte, err := ioutil.ReadFile(filename)
 	panicOnErr(err, "can't read config")
